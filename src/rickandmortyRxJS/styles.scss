@@ -1,0 +1,218 @@
+body {
+    font-family: -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+
+    h1 {
+        text-transform: uppercase;
+        line-height: 0.75em;
+        color: rgb(32, 35, 41);
+        font-size: 3.75rem;
+        border-width: initial;
+        border-style: none;
+        border-color: initial;
+        border-image: initial;
+    }
+
+    .search-wrapper {
+        margin-bottom: 1rem;
+        
+        input,
+        span,
+        label,
+        textarea {
+            display: block;
+            margin: 10px;
+            padding: 5px;
+            border: none;
+            font-size: 22px;
+        }
+
+        textarea:focus,
+        input:focus {
+            outline: 0;
+        }
+
+        /* Question */
+
+        input.question,
+        textarea.question { 
+            font-size: 48px;
+            font-weight: 300;
+            border-radius: 2px;
+            margin: 0;
+            border: none;
+            width: 80%;
+            background: rgba(0, 0, 0, 0);
+            transition: padding-top 0.2s ease, margin-top 0.2s ease;
+            overflow-x: hidden;
+            /* Hack to make "rows" attribute apply in Firefox. */
+        }
+
+        /* Underline and Placeholder */
+
+        input.question+label,
+        textarea.question+label {
+            display: block;
+            position: relative;
+            white-space: nowrap;
+            padding: 0;
+            margin: 0;
+            width: 10%;
+            border-top: 1px solid red;
+            -webkit-transition: width 0.4s ease;
+            transition: width 0.4s ease;
+            height: 0px;
+        }
+
+        input.question:focus+label,
+        textarea.question:focus+label {
+            width: 80%;
+        }
+
+        input.question:focus,
+        input.question:valid {
+            padding-top: 35px;
+        }
+
+        textarea.question:valid,
+        textarea.question:focus {
+            margin-top: 35px;
+        }
+
+        input.question:focus+label>span,
+        input.question:valid+label>span {
+            top: -100px;
+            font-size: 22px;
+            color: #333;
+        }
+
+        textarea.question:focus+label>span,
+        textarea.question:valid+label>span {
+            top: -150px;
+            font-size: 22px;
+            color: #333;
+        }
+
+        input.question:valid+label,
+        textarea.question:valid+label {
+            border-color: green;
+        }
+
+        input.question:invalid,
+        textarea.question:invalid {
+            box-shadow: none;
+        }
+
+        input.question+label>span,
+        textarea.question+label>span {
+            font-weight: 300;
+            margin: 0;
+            position: absolute;
+            color: #8F8F8F;
+            font-size: 48px;
+            top: -66px;
+            left: 0px;
+            z-index: -1;
+            -webkit-transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease;
+            transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease;
+        }
+
+        @-webkit-keyframes appear {
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes appear {
+            100% {
+                opacity: 1;
+            }
+        }
+
+    }
+
+    .character-card {
+        max-width: 300px;
+        margin-bottom: 0.625rem;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 2px 2px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+        border-radius: 0.625rem;
+        overflow: hidden;
+        float: left;
+        margin-left: 1rem;
+
+        .character-card-header {
+            position: relative;
+            max-width: 300px;
+            max-height: 300px;
+
+            .card-image {
+                width: 300px;
+                height: 300px;
+                background: rgb(32, 35, 41);
+
+                img {
+                    margin: 0px;
+                    overflow: hidden;
+                    height: 100%;
+                    width: auto;
+                    display: block;
+                }
+            }
+
+            .character-card-title {
+                width: 100%;
+                opacity: 0.8;
+                position: absolute;
+                bottom: 0px;
+                background: rgb(32, 35, 41);
+                padding: 0.625rem;
+
+                h2 {
+                    color: rgb(245, 245, 245);
+                    font-size: 1.625rem;
+                    font-weight: 400;
+                    font-stretch: expanded;
+                    margin: 0px;
+                }
+
+                p {
+                    color: rgb(187, 187, 187);
+                    font-size: 0.875rem;
+                    margin: 0px;
+                }
+            }
+        }
+
+        .character-info-block {
+            height: 100%;
+            color: rgb(255, 152, 0);
+            padding: 1.25rem;
+            background: rgb(51, 51, 51);
+
+            .character-info-item {
+                display: flex;
+                -webkit-box-pack: justify;
+                justify-content: space-between;
+                -webkit-box-align: center;
+                align-items: center;
+                flex-wrap: nowrap;
+                padding: 0.75rem 0px 0.375rem;
+                border-bottom: 1px solid rgb(68, 68, 68);
+
+                span {
+                    font-size: 0.7rem;
+                    font-weight: 400;
+                    color: rgb(158, 158, 158);
+                }
+
+                p {
+                    width: 100%;
+                    font-size: 0.9rem;
+                    font-weight: 200;
+                    text-align: right;
+                    padding: 0px;
+                    margin: 0px;
+                }
+            }
+        }
+    }
+}

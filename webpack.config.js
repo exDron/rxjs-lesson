@@ -5,7 +5,7 @@ const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   mode: 'none',
-  entry: './src/rickandmorty',
+  entry: './src/rickandmortyRxJS/rickandmorty',
   output: {
     filename: '[name].bundle.js',
     chunkFilename: '[name].bundle.js',
@@ -25,6 +25,14 @@ module.exports = {
             loader: 'ts-loader'
           }
         ]
+      },
+      {
+        test: /\.scss$/,
+            use: [
+                "style-loader", // creates style nodes from JS strings
+                "css-loader", // translates CSS into CommonJS
+                "sass-loader" // compiles Sass to CSS, using Node Sass by default
+            ]
       },
     ],
   },
