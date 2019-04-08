@@ -5,7 +5,7 @@ const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   mode: 'none',
-  entry: './src/rickandmortyRxJS/rickandmorty',
+  entry: './src/rickandmortyRxJS/index',
   output: {
     filename: '[name].bundle.js',
     chunkFilename: '[name].bundle.js',
