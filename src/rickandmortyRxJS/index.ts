@@ -5,5 +5,5 @@ import { RickAndMortyCharacterProvider } from './RickAndMortyCharacterProvider';
 
 /* Entry Point: */
 const rickAndMortyProvider = new RickAndMortyCharacterProvider();
-rickAndMortyProvider.renderCharacters();
+rickAndMortyProvider.renderCharacters(1);
   

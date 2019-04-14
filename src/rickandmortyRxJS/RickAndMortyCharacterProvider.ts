@@ -1,58 +1,40 @@
 import { RickAndMortyCharacterRender } from "./RickAndMortyCharacterRender";
 import { Character, Pagination } from "./models";
 import { Observable, fromEvent, from } from "rxjs";
+import { ApiService } from "./ApiService";
+import { SEARCH_INPUT_SELECTOR, PAGINATION_SELECTOR } from "./constants";
+
 
 export class RickAndMortyCharacterProvider {
 
-    protected apiUrl: string = 'https://rickandmortyapi.com/graphql/';
-    protected characterRequest: string = `{
-        characters(page: 1) {
-          results {
-            id,
-            name,
-            image,
-            status,
-            species,
-            gender,
-            origin {
-              name
-            },
-            location {
-              name
-            },
-          },
-          info {
-              pages,
-              prev
-            }
-        }
-      }`;
-      protected searchIputId: string = '#search-input';
-      protected paginationSelector = '.pagination-wrapper .pagination ul a';
       protected characters: Array<Character> = [];
       protected pagination: Pagination = {
           prev: null,
           pages: 25
       };
       protected renderer: RickAndMortyCharacterRender;
+      protected apiService: ApiService;
   
       constructor() {
         this.initSearchCharacter();
         this.initPagination();
         this.renderer = new RickAndMortyCharacterRender();
+        this.apiService = new ApiService();
       }
   
-      public renderCharacters(): void {
-        const observable = this.getCharacters();
+      public renderCharacters(page: number): void {
+        const observable = this.getCharacters(page);
         observable.subscribe((res: any) => {
           this.characters = res.data.characters.results;
           this.pagination = res.data.characters.info;
-          this.renderer.renderCharacterCards(res.data.characters.results, res.data.characters.info);
+          this.renderer.renderCharacterCards(res.data.characters.results, res.data.characters.info).subscribe((res) => {
+              this.initPagination();
+          });
         });
       }
   
       protected initSearchCharacter() {
-        const inputElem: HTMLInputElement | null = document.querySelector(this.searchIputId);
+        const inputElem: HTMLInputElement | null = document.querySelector(SEARCH_INPUT_SELECTOR);
         if (!inputElem) {
           throw new Error('Search input is not exist!');
         }
@@ -62,32 +44,26 @@ export class RickAndMortyCharacterProvider {
             let filteredCharacters: Array<Character> = this.characters.filter((character: Character) => {
                 return character.name.toLowerCase().includes(searchString);
             });
-            this.renderer.renderCharacterCards(filteredCharacters, this.pagination);          
+            this.renderer.renderCharacterCards(filteredCharacters, this.pagination).subscribe((res) => {
+              this.initPagination();
+            });          
         });
       }
 
       protected initPagination() {
-        let pagination = document.querySelectorAll(this.paginationSelector);
-        console.log(pagination);
+        let pagination = document.querySelectorAll(PAGINATION_SELECTOR);
+        if (pagination.length) {
+          pagination.forEach((item) => {
+            item.addEventListener('click', (e: any) => {
+              e.preventDefault();
+              const page = e.srcElement.attributes.href.textContent;
+              this.renderCharacters(page);
+            });
+          })
+        }
       }
   
-      protected getCharacters(): Observable<any> {
-        const observable: Observable<string> = new Observable(observer => {
-          from(
-              fetch(`${this.apiUrl}`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ query: this.characterRequest }),
-                })
-              .then((res: Response) => res.json())
-              .then((data: string) => {
-                observer.next(data);
-              })
-              .catch((err) => console.log(err))
-            )
-          
-        });
-  
-        return observable;
+      protected getCharacters(page: number): Observable<any> {
+        return this.apiService.makeGraphQlRequest(page);
       }
   }

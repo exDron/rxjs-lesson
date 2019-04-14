@@ -1,20 +1,24 @@
 import { Character, Pagination } from './models';
+import { Observable } from 'rxjs';
+import { CARD_WRAPPER_ID } from './constants';
 
 export class RickAndMortyCharacterRender {
-
-    protected wrapperId: string = 'charaters-wrapper';
   
-    public renderCharacterCards(characters: Array<Character>, pagination: Pagination): void {
-      let characterCards: string = '';
-      characters.forEach((character: Character) => {
-        characterCards += this.getCharacterCard(character); 
-      });
-
-      characterCards += this.getPagiantion(pagination);  
-      let charactersWrapper: HTMLElement | null = document.getElementById(this.wrapperId);
-      if (charactersWrapper) {
-        charactersWrapper.innerHTML = characterCards;
-      }
+    public renderCharacterCards(characters: Array<Character>, pagination: Pagination): Observable<string> {
+      return Observable.create((observer: any) => {
+          let characterCards: string = '';
+          characters.forEach((character: Character) => {
+            characterCards += this.getCharacterCard(character); 
+          });
+    
+          characterCards += this.getPagiantion(pagination);  
+          let charactersWrapper: HTMLElement | null = document.getElementById(CARD_WRAPPER_ID);
+          if (charactersWrapper) {
+            charactersWrapper.innerHTML = characterCards;
+          }
+          observer.next();
+      })
+      
     }
   
     protected getCharacterCard(character: Character): string {
@@ -57,18 +61,18 @@ export class RickAndMortyCharacterRender {
   
     protected getPagiantion(pagination: Pagination) {
         let prev = pagination.prev ? pagination.prev : 1;
-        let current = prev == 1 ? 1 : prev + 1;
+        let current = pagination.prev == null ? 1 : prev + 1;
         let next = current + 1;
 
         return `<div class="pagination-wrapper">
                     <div class="container">
                         <div class="pagination p11">
                             <ul>
-                                <a href="${prev}"><li>Previous</li></a>
-                                <a class="is-active" href="${current}"><li>${current}</li></a>
-                                <a href="${next}"><li>${next}</li></a>
-                                <a href="${next + 1}"><li>${next + 1}</li></a>
-                                <a href="${next}"><li>Next</li></a>
+                                <a data-page="${prev}" href="${prev}">Previous</a>
+                                <a class="is-active" href="${current}">${current}</a>
+                                <a href="${next}">${next}</a>
+                                <a href="${next + 1}">${next + 1}</a>
+                                <a href="${next}">Next</a>
                             </ul>
                         </div>
                     </div>
